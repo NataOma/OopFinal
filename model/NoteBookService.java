@@ -23,7 +23,7 @@ public class NoteBookService {
                             theme,
                             LocalTime.parse(strTime),
                             LocalDate.parse(strDate)));
-        ((Object) this.noteBook.getNotebook()).getLast().setId(idCreator++);
+        this.noteBook.getNotebook().getLast().setId(idCreator++);
     }
 
     public void addNote(Note note){
