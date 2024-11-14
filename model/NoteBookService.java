@@ -17,58 +17,61 @@ public class NoteBookService {
     public NoteBookService() {
         this.noteBook = new NoteBook();
     }
-    public void addNote(String theme, String strTime, String strDate){
+
+    public void addNote(String theme, String strTime, String strDate) {
         this.noteBook.getNotebook().add(
                 new Note(
-                            theme,
-                            LocalTime.parse(strTime),
-                            LocalDate.parse(strDate)));
+                        theme,
+                        LocalTime.parse(strTime),
+                        LocalDate.parse(strDate)));
         this.noteBook.getNotebook().getLast().setId(idCreator++);
     }
 
-    public void addNote(Note note){
+    public void addNote(Note note) {
         note.setId(idCreator++);
         this.noteBook.getNotebook().add(note);
     }
-    public List<Note> getAll(){
+
+    public List<Note> getAll() {
         return this.noteBook.getNotebook();
     }
 
     public void saveToFile(String path) throws IOException {
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new
-                FileOutputStream(path))) {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path))) {
 
             objectOutputStream.writeObject(this.noteBook);
         }
     }
 
-    public void loadFromFile(String path) throws IOException, ClassNotFoundException{
+    public void loadFromFile(String path) throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(path))) {
-            this.noteBook =  (NoteBook) objectInputStream.readObject();
+            this.noteBook = (NoteBook) objectInputStream.readObject();
         }
     }
-    public List<Note> getFromDay(LocalDate date){
+
+    public List<Note> getFromDay(LocalDate date) {
         List<Note> listNote = new ArrayList<>();
-        for (Note note : this.getAll()){
-            if (note.getDate().equals(date)){
+        for (Note note : this.getAll()) {
+            if (note.getDate().equals(date)) {
                 listNote.add(note);
             }
         }
         return listNote;
     }
-    public void sortByDate(){
-            noteBook.getNotebook().sort(new ComparatorByDate<>());
-//        return noteBook;
+
+    public void sortByDate() {
+        noteBook.getNotebook().sort(new ComparatorByDate<>());
+        // return noteBook;
     }
-//    public List<Note>
-public List<Note> getNotesForWeek(LocalDate startOfWeek) {
-    LocalDate endOfWeek = startOfWeek.plusWeeks(1);
-    return noteBook.getNotebook().stream()
-            .filter(note ->
-                    !note.getDate().isBefore(startOfWeek) &&
-                            !note.getDate().isAfter(endOfWeek))
-            .sorted(Comparator.comparing(Note::getDate))
-            .collect(Collectors.toList());
-}
+
+    // public List<Note>
+    public List<Note> getNotesForWeek(LocalDate startOfWeek) {
+        LocalDate endOfWeek = startOfWeek.plusWeeks(1);
+        return noteBook.getNotebook().stream()
+                .filter(note -> !note.getDate().isBefore(startOfWeek) &&
+                        !note.getDate().isAfter(endOfWeek))
+                .sorted(Comparator.comparing(Note::getDate))
+                .collect(Collectors.toList());
+    }
 
 }
